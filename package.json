@@ -1,0 +1,25 @@
+{
+  "name": "hcrhub-candidate-intelligence",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "node src/server.mjs",
+    "dev": "node --watch src/server.mjs",
+    "test": "node --test",
+    "extract:run": "node scripts/run-location-extractor.mjs",
+    "schools:start": "node scripts/run-school-bot.mjs --start",
+    "schools:status": "node scripts/run-school-bot.mjs --status",
+    "schools:stop": "node scripts/run-school-bot.mjs --stop",
+    "check:extraction": "node --check src/extraction-bot-state.mjs && node --check src/extraction-bot-engine.mjs && node --check src/extraction-bot-control.mjs && node --check src/salesnav-extraction-browser.mjs && node --check scripts/run-location-extractor.mjs && node --check public/extraction-bot.js",
+    "check": "node --check src/server.mjs && node --check src/db.mjs && node --check src/migrations.mjs && node --check src/candidates.mjs && node --check src/identity-search.mjs && node --check src/domain.mjs && node --check src/csv.mjs && node --check src/enrichment.mjs && node --check src/campaign.mjs && node --check src/clay-mcp.mjs && node --check src/providers/controlled-csv.mjs && node --check src/browser-agent.mjs && node --check scripts/export-checkpoint.mjs && node --check scripts/run-browser-agent.mjs && node --check scripts/launch-brave-debug.mjs && node --check scripts/audit-browser-confirmations.mjs && node --check public/app.js && node --check test/candidates.test.mjs && node --check test/ai-optimization.test.mjs && node --check test/browser-agent.test.mjs && node --check src/institution-state.mjs && node --check src/match-keys.mjs && node --check src/verifier.mjs && node --check src/bakeoff.mjs && node --check src/providers/provider-contract.mjs && node --check src/providers/pdl.mjs && node --check src/providers/mock-provider.mjs && node --check src/providers/index.mjs && node --check scripts/build-match-keys.mjs && node --check scripts/run-provider-bakeoff.mjs && npm run check:agents",
+    "check:agents": "node --check src/location-agents.mjs && node --check src/location-sheet-match.mjs && node --check src/school-verification.mjs && node --check src/linkedin-school-reader.mjs && node --check src/location-match-report.mjs && node --check scripts/compare-location-sheets.mjs && node --check scripts/run-school-verifier.mjs && node --check public/location-agents.js && node --check src/linkedin-education-dom.mjs && node --check src/school-verification-store.mjs && node --check scripts/run-school-pilot.mjs && node --check src/name-variants.mjs && node --check scripts/rematch-location-jobs.mjs"
+  },
+  "dependencies": {
+    "playwright-core": "^1.63.0",
+    "read-excel-file": "^9.3.10"
+  }
+}

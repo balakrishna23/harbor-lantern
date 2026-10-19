@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Browser Agent — Live Monitor</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="live-agent.css">
+</head>
+<body>
+<header>
+  <div>
+    <p class="eyebrow">HCRHUB CANDIDATE INTELLIGENCE</p>
+    <h1>Browser Agent — Live Monitor</h1>
+    <p class="subtitle"><span id="pulse" class="pulse"></span><span id="statusLine">Connecting…</span></p>
+  </div>
+  <div class="badge" id="clock"></div>
+</header>
+<main class="live">
+  <div class="panel" id="roundPanel" hidden>
+    <h2>This search round</h2>
+    <p class="muted-small" id="roundNote"></p>
+    <div class="metrics live-metrics">
+      <div class="metric"><strong id="rSearched">–</strong><span>Searched</span></div>
+      <div class="metric"><strong id="rConfirmed">–</strong><span>Confirmed</span></div>
+      <div class="metric"><strong id="rReview">–</strong><span>Found, needs review</span></div>
+      <div class="metric"><strong id="rNotFound">–</strong><span>Not found</span></div>
+      <div class="metric"><strong id="rRemainingAct">–</strong><span>ACT still to search</span></div>
+      <div class="metric"><strong id="rRemainingNational">–</strong><span>National still to search</span></div>
+      <div class="metric"><strong id="rRate">–</strong><span>Saved results / min (last 15 min)</span></div>
+      <div class="metric"><strong id="rEta">–</strong><span>Estimated time left</span></div>
+    </div>
+  </div>
+
+  <h2 class="section-label">All time</h2>
+  <div class="metrics live-metrics">
+    <div class="metric"><strong id="mTotal">–</strong><span>Total candidates</span></div>
+    <div class="metric"><strong id="mConfirmedSN">–</strong><span>Confirmed (Sales Nav)</span></div>
+    <div class="metric"><strong id="mConfirmedAcademic">–</strong><span>Confirmed (Academic/web)</span></div>
+    <div class="metric"><strong id="mManualReview">–</strong><span>Found, not confirmed</span></div>
+    <div class="metric"><strong id="mUnresolved">–</strong><span>Searched, not found</span></div>
+    <div class="metric"><strong id="mWithLinkedIn">–</strong><span>Have a LinkedIn URL</span></div>
+    <div class="metric"><strong id="mQueued">–</strong><span>Still queued</span></div>
+  </div>
+
+  <div class="panel">
+    <h2>Live activity feed</h2>
+    <p class="muted-small">Most recent Sales Navigator lookups, newest first. Refreshes automatically — no need to reload.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Candidate</th>
+            <th>Result</th>
+            <th>Decision</th>
+            <th>Score</th>
+            <th>LinkedIn</th>
+          </tr>
+        </thead>
+        <tbody id="feedBody">
+          <tr><td colspan="6" class="empty">Waiting for data…</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="load-more-row">
+      <button type="button" class="secondary" id="loadOlderBtn" hidden>Load older entries</button>
+      <span class="muted-small" id="feedCount"></span>
+    </div>
+  </div>
+</main>
+<script src="live-agent.js"></script>
+</body>
+</html>

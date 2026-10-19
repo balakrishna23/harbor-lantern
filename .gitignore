@@ -1,0 +1,30 @@
+# Runtime data, exports and scratch
+data/
+exports/
+tmp/
+.claude/
+node_modules/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Licensed AHPRA register data and derived personal data: never commit
+*.xlsx
+*.xls
+*.xlsm
+*.sqlite
+*.sqlite-*
+*.db
+*.jsonl
+*.zip
+
+# OS / logs
+*.log
+.DS_Store
+Thumbs.db
+
+# Generated deliverables and raw search exports (contain personal data)
+outputs/
+/*.csv

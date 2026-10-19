@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>HCRHUB Candidate Intelligence</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <div>
+      <p class="eyebrow">HCRHUB AUSTRALIA</p>
+      <h1>Candidate Intelligence</h1>
+      <p class="subtitle">Licensed AHPRA data, controlled enrichment and recruiter review.</p>
+    </div>
+    <span class="badge">Pilot mode</span>
+  </header>
+
+  <main>
+    <section id="metrics" class="metrics"></section>
+
+    <nav class="tabs" aria-label="Project sections">
+      <button class="active" data-tab="candidates">Candidates</button>
+      <button data-tab="import">Import AHPRA data</button>
+      <button data-tab="locationAgents">Location matching agents</button>
+      <a href="/extraction-bot.html">Australia extraction bot</a>
+      <button data-tab="enrichment">Enrichment batches</button>
+      <button data-tab="results">Import Clay results</button>
+      <button data-tab="clayConnection">Clay connection</button>
+    </nav>
+
+    <section id="candidates" class="panel tab-panel active">
+      <div class="toolbar">
+        <input id="search" placeholder="Search name, AHPRA number, profession or employer">
+        <select id="statusFilter">
+          <option value="">All identity statuses</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="pending_confirmation">Pending confirmation</option>
+          <option value="manual_review">Manual review</option>
+          <option value="rejected">Rejected</option>
+        </select>
+        <select id="pageSize" aria-label="Rows per page">
+          <option value="25">25 rows</option>
+          <option value="50" selected>50 rows</option>
+          <option value="100">100 rows</option>
+        </select>
+        <button id="refresh" class="secondary">Refresh</button>
+        <a href="/api/export/campaign-ready.csv"><button type="button">Export campaign-ready CSV</button></a>
+      </div>
+      <div id="candidateTable" class="table-wrap"></div>
+      <div class="pagination" aria-label="Candidate pagination">
+        <button id="previousPage" class="secondary">Previous</button>
+        <span id="pageSummary">Page 1</span>
+        <button id="nextPage" class="secondary">Next</button>
+      </div>
+    </section>
+
+    <section id="import" class="panel tab-panel">
+      <h2>Import licensed AHPRA data</h2>
+      <p>Import the supplied Excel workbook directly, or use UTF-8 CSV. Original source metadata and row numbers are retained.</p>
+      <label>AHPRA Excel or CSV file<input id="sourceFile" type="file" accept=".xlsx,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv"></label>
+      <label>Data-supply agreement reference<input id="agreement" placeholder="Agreement or purchase reference"></label>
+      <button id="importButton">Import data</button>
+      <pre id="importResult"></pre>
+    </section>
+
+    <section id="locationAgents" class="panel tab-panel">
+      <h2>Location matching agents</h2>
+      <p>Upload real Sales Navigator exports from any Australian location. Match them to the national register, then run the separate LinkedIn school checks.</p>
+      <div class="form-grid">
+        <label>Run name<input id="locationRunName" placeholder="e.g. NSW October search"></label>
+        <label>Excel or CSV exports<input id="locationFiles" type="file" multiple accept=".xlsx,.csv"></label>
+      </div>
+      <label class="checkbox"><input id="locationRealData" type="checkbox"> These files contain real search results, ready for matching.</label>
+      <button id="startLocationMatch" disabled>1. Match against register</button>
+      <p id="locationUploadStatus" role="status"></p>
+      <hr>
+      <div class="form-grid">
+        <label>Matching run<select id="locationJobSelect"><option value="">No matching runs yet</option></select></label>
+        <label>Profiles to check this time<input id="locationCheckLimit" type="number" min="1" max="100" value="10"></label>
+      </div>
+      <label class="checkbox"><input id="locationRetry" type="checkbox"> Retry profiles previously unavailable or blocked.</label>
+      <div class="toolbar">
+        <button id="startSchoolChecks" disabled>2. Start school checks</button>
+        <button id="stopLocationAgent" class="secondary" disabled>Stop agent</button>
+        <button id="refreshLocationJobs" class="secondary">Refresh</button>
+      </div>
+      <p id="locationJobStatus" role="status">No real data has been submitted.</p>
+      <p id="locationJobError" class="agent-error" role="alert"></p>
+      <div id="locationSummary" class="agent-summary"></div>
+      <div id="locationDownloads" class="toolbar"></div>
+      <div id="locationProfileTable" class="table-wrap"><div class="empty">Results will appear after you upload real exports and start matching.</div></div>
+      <div class="pagination">
+        <button id="locationPrevious" class="secondary" disabled>Previous</button>
+        <span id="locationPageSummary"></span>
+        <button id="locationNext" class="secondary" disabled>Next</button>
+      </div>
+      <p>Eligibility uses registered, practising Division 1 RN registrations in the imported extract. Clear name-and-school matches update candidate identities in the database. Existing identity conflicts and ambiguous matches remain for review.</p>
+    </section>
+
+    <section id="enrichment" class="panel tab-panel">
+      <h2>Create controlled Clay batch</h2>
+      <p>Start with identity discovery. After recruiter confirmation, create a separate email or phone batch.</p>
+      <div class="form-grid">
+        <label>Batch name<input id="batchName" value="Free-credit pilot"></label>
+        <label>Enrichment type
+          <select id="batchKind">
+            <option value="identity">Identity discovery (first step)</option>
+            <option value="email">Email + verification</option>
+            <option value="phone">Phone only</option>
+            <option value="email_phone">Email + phone</option>
+          </select>
+        </label>
+        <label>Credit ceiling<input id="creditBudget" type="number" value="350" min="1"></label>
+        <label>Record ceiling<input id="recordCeiling" type="number" value="15" min="1" max="20"></label>
+        <label><input id="dryRun" type="checkbox" checked> Dry run (no provider execution)</label>
+      </div>
+      <p><strong id="selectionCount">0 candidates selected</strong></p>
+      <button id="createBatch">Create controlled batch</button>
+      <div id="batchList"></div>
+    </section>
+
+    <section id="results" class="panel tab-panel">
+      <h2>Import Clay results</h2>
+      <p>Required column: <code>candidate_id</code>. Supported result columns include <code>work_email</code>, <code>email_status</code>, <code>mobile_phone</code>, <code>employer</code>, <code>current_title</code> and <code>linkedin_url</code>.</p>
+      <label>Batch<select id="resultsBatch"><option value="">Choose a batch</option></select></label>
+      <label>Clay results CSV<input id="resultsFile" type="file" accept=".csv,text/csv"></label>
+      <button id="importResults">Import results</button>
+      <pre id="resultsOutput"></pre>
+    </section>
+
+    <section id="clayConnection" class="panel tab-panel">
+      <h2>Clay MCP connection</h2>
+      <p>Connect through Clay OAuth. Tokens remain in server memory and are discarded whenever HCRHUB stops.</p>
+      <p><strong>Connecting does not run an enrichment or spend credits.</strong> Clay functions must be enabled by a workspace administrator before HCRHUB can use them.</p>
+      <div class="dialog-actions">
+        <button id="connectClay">Connect Clay</button>
+        <button id="refreshClayTools" class="secondary">Refresh available functions</button>
+        <button id="disconnectClay" class="secondary">Disconnect</button>
+      </div>
+      <p id="clayStatus">Checking connection…</p>
+      <div id="clayTools" class="history-list"></div>
+    </section>
+  </main>
+
+  <dialog id="reviewDialog">
+    <form method="dialog" id="reviewForm">
+      <h2>Recruiter identity review</h2>
+      <input id="reviewId" type="hidden">
+      <p id="reviewName" class="review-name"></p>
+      <div class="review-columns">
+        <section class="review-section"><h3>Official AHPRA source</h3><div id="reviewSource"></div></section>
+        <section class="review-section"><h3>Provider-enriched identity</h3><div id="reviewEvidence"></div></section>
+      </div>
+      <section class="review-section"><h3>Unconfirmed leads found by search agent</h3><div id="reviewSuggestedLeads"></div></section>
+      <label>Decision
+        <select id="reviewStatus">
+          <option value="confirmed">Confirmed identity</option>
+          <option value="manual_review">Keep in manual review</option>
+          <option value="rejected">Wrong person / reject</option>
+        </select>
+      </label>
+      <label>LinkedIn URL<input id="reviewLinkedin"></label>
+      <label>Current employer<input id="reviewEmployer"></label>
+      <label>Current title<input id="reviewTitle"></label>
+      <label class="checkbox"><input id="reviewBasis" type="checkbox"> Contact basis reviewed and approved</label>
+      <label>Recruiter notes<textarea id="reviewNotes" rows="4"></textarea></label>
+      <label>Reviewer<input id="reviewer" value="Local recruiter"></label>
+      <fieldset>
+        <legend>Privacy controls</legend>
+        <label class="checkbox"><input id="reviewSuppressed" type="checkbox"> Suppressed</label>
+        <label class="checkbox"><input id="reviewOptedOut" type="checkbox"> Opted out</label>
+        <label>Reason<input id="suppressionReason" placeholder="Required when applying a restriction"></label>
+      </fieldset>
+      <p id="campaignEligibility"></p>
+      <section class="review-section"><h3>Decision history</h3><div id="reviewHistory" class="history-list"></div></section>
+      <section class="review-section"><h3>Enrichment history and provider errors</h3><div id="enrichmentHistory" class="history-list"></div></section>
+      <div class="dialog-actions"><button value="cancel" class="secondary">Cancel</button><button id="saveSuppression" type="button" class="secondary">Save privacy controls</button><button id="saveReview" value="default">Save review</button></div>
+    </form>
+  </dialog>
+  <div id="toast" role="status"></div>
+  <script type="module" src="/app.js"></script>
+  <script type="module" src="/location-agents.js"></script>
+</body>
+</html>

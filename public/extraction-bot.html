@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Australia extraction bot</title><link rel="stylesheet" href="/styles.css"></head>
+<body><header><div><p class="eyebrow">HCRHUB AUSTRALIA</p><h1>Australia extraction bot</h1><p>Combine locations, create lists, extract, download, compare, repeat.</p></div><a href="/#locationAgents">Register matching results</a></header>
+<main><section class="panel"><div class="toolbar"><button id="start">Start / resume</button><button id="pause" class="secondary">Pause after current batch</button><button id="refresh" class="secondary">Refresh</button></div>
+<p id="status" role="status">Loading…</p><p id="error" role="alert"></p><div id="summary" class="metrics"></div>
+<h2>Current batch</h2><div id="current"></div>
+<p>The limit is 99 search pages. Saved counts and exported rows are reconciled after each batch. Searches that exceed the limit, unavailable tags and short exports remain visible for follow-up. Official locality names are suggestions until Sales Navigator offers the tag.</p>
+<p>Keep Brave open and signed in. The bot uses its existing debugging connection and never restarts the browser. School verification remains a separate action in the matching dashboard.</p></section>
+<section class="panel"><h2>Recent batches</h2><div id="batches" class="table-wrap"></div></section>
+<section class="panel"><h2>Activity</h2><div id="events"></div></section></main><script src="/extraction-bot.js"></script></body></html>

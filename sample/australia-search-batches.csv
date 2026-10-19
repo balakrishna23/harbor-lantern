@@ -1,0 +1,14 @@
+batch_id,sales_navigator_location,scope,split_if_export_capped
+ACT,Australian Capital Territory Australia,Entire ACT including Canberra,Use available ACT suburbs or districts
+NSW,New South Wales Australia,Entire state including regional and remote NSW,Use non-overlapping regions and retain a rest-of-state catch-up
+VIC,Victoria Australia,Entire state including regional and remote Victoria,Use non-overlapping regions and retain a rest-of-state catch-up
+QLD,Queensland Australia,Entire state including regional and remote Queensland,Use non-overlapping regions and retain a rest-of-state catch-up
+SA,South Australia Australia,Entire state including regional and remote SA,Use non-overlapping regions and retain a rest-of-state catch-up
+WA,Western Australia Australia,Entire state including regional and remote WA,Use non-overlapping regions and retain a rest-of-state catch-up
+TAS,Tasmania Australia,Entire state including regional Tasmania,Use available regions and retain a rest-of-state catch-up
+NT,Northern Territory Australia,Entire territory including remote NT,Use available regions and retain a rest-of-territory catch-up
+JBT,Jervis Bay Territory,Entire territory,If unavailable use Australia-wide catch-up and inspect locations
+NI,Norfolk Island,Entire island,If unavailable use Australia-wide catch-up and inspect locations
+CI,Christmas Island,Entire island,If unavailable use Australia-wide catch-up and inspect locations
+CKI,Cocos Keeling Islands,Home Island and West Island,If unavailable use Australia-wide catch-up and inspect locations
+AU_UNSPECIFIED,Australia,Country-only or unspecified locations plus territorial catch-up,Deduplicate with all regional exports
